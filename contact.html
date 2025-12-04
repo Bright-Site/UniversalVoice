@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact | Universal Voice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <!-- Standard favicon (16x16 / 32x32) -->
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+  <!-- High-resolution favicon (180x180) -->
+  <link rel="apple-touch-icon" href="images/faviconApple.png" sizes="180x180">
+
+  <style>
+    :root {
+      --bg: #0b1a1f;
+      --accent: #00e5a9;
+      --text: #e0f7f4;
+      --text-light: #88d9c9;
+      --field-bg: rgba(255,255,255,0.08);
+      --border: rgba(0,229,169,0.3);
+    }
+
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg) url('images/GalaxyBackground.webp') center/cover no-repeat fixed;
+      color: var(--text);
+      overflow-x: hidden;
+      /* This is the magic line */
+      background-image: 
+        linear-gradient(rgba(11,26,31,0.95), rgba(11,26,31,0.95)),
+        url('images/GalaxyBackground.webp');
+      background-attachment: fixed;
+      background-position: center;
+      background-size: cover;
+    }
+
+    /* As soon as the image loads → remove the dark overlay → instant beautiful galaxy */
+    body.bg-loaded {
+      background-image: url('images/GalaxyBackground.webp');
+      transition: background-image 1.4s ease-in-out;
+    }
+
+    /* Rest of your styles (100% unchanged) */
+    .header {
+      padding: 20px 30px;
+      display: flex; justify-content: space-between; align-items: center;
+      backdrop-filter: blur(10px);
+      background: rgba(11,26,31,0.7);
+      position: fixed; width: 100%; top: 0; z-index: 100;
+      box-sizing: border-box;
+    }
+    .logo { font-size: 24px; font-weight: 700; color: var(--accent); }
+    .nav a { color: var(--text-light); margin-left: 30px; text-decoration: none; font-weight: 500; }
+    .nav a:hover { color: var(--accent); }
+
+    .container {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 120px 20px 80px;
+    }
+    .contact-card {
+      background: rgba(11,26,31,0.88);
+      backdrop-filter: blur(15px);
+      border-radius: 24px;
+      padding: 50px 45px;
+      max-width: 560px; width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border: 1px solid rgba(0,229,169,0.2);
+    }
+    h1 {
+      font-size: 48px; margin: 0 0 12px;
+      background: linear-gradient(90deg, #00e5a9, #00ffb3);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+    p.subtitle { text-align: center; font-size: 18px; color: var(--text-light); margin-bottom: 40px; line-height: 1.6; }
+    form { margin-top: 30px; }
+    .form-group { margin-bottom: 24px; }
+    label { display: block; margin-bottom: 8px; color: var(--text-light); font-weight: 500; }
+    input, textarea {
+      width: 100%; padding: 14px 16px; background: var(--field-bg);
+      border: 1px solid var(--border); border-radius: 12px; color: white;
+      font-size: 16px; box-sizing: border-box; transition: all 0.3s;
+    }
+    input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,169,0.2); }
+    textarea { min-height: 140px; resize: vertical; }
+    button {
+      background: var(--accent); color: #0b1a1f; font-weight: 700; font-size: 18px;
+      padding: 14px 40px; border: none; border-radius: 50px; cursor: pointer;
+      width: 100%; transition: all 0.3s;
+    }
+    button:hover { background: #00ffb3; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,229,169,0.4); }
+    .success { background: rgba(0,229,169,0.15); color: var(--accent); padding: 16px; border-radius: 12px;
+      margin-top: 20px; text-align: center; display: none; }
+    footer { text-align: center; padding: 40px; color: #555; font-size: 14px; }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- Your content stays exactly the same -->
+  <header class="header">
+    <div class="logo">Universal Voice™</div>
+    <nav class="nav"><a href="index.html">Back</a></nav>
+  </header>
+
+  <div class="container">
+    <div class="contact-card">
+      <h1>Lets Talk</h1>
+      <p class="subtitle">The easiest way for me to understand your needs is to start up a conversation, after that we can comminicate in any way you prefer.</p>
+
+      <form id="contactForm" action="https://formspree.io/f/mqavgykr" method="POST">
+        <div class="form-group"><label for="name">Name</label><input type="text" id="name" name="name" required placeholder="What shall i call you?" /></div>
+        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="_replyto" required placeholder="you@example.com" /></div>
+        <div class="form-group"><label for="subject">Subject</label><input type="text" id="subject" name="subject" required placeholder="How can i help?" /></div>
+        <div class="form-group"><label for="message">Your Message</label><textarea id="message" name="message" required placeholder="Lets chat.."></textarea></div>
+        <button type="submit">Send Message</button>
+        <div class="success" id="successMessage">Thank you! Your message has been sent. I’ll reply shortly.</div>
+      </form>
+    </div>
+  </div>
+
+  <footer>© 2025 Virtual Shift™ • All Rights Reserved</footer>
+
+  <!-- 5 lines of rock-solid JavaScript -->
+  <script>
+    // Start loading the image immediately
+    const img = new Image();
+    img.src = 'images/GalaxyBackground.webp';
+    
+    img.onload = () => {
+      document.body.classList.add('bg-loaded');
+    };
+  </script>
+
+  <!-- Form feedback (unchanged) -->
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', () => {
+      setTimeout(() => {
+        document.getElementById('contactForm').reset();
+        document.getElementById('successMessage').style.display = 'block';
+        setTimeout(() => document.getElementById('successMessage').style.display = 'none', 6000);
+      }, 800);
+    });
+  </script>
+
+</body>
+</html>

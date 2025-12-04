@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="Universal Voice: Helping channelers create a professional online presence with branding, websites, and more.">
+  <meta name="keywords" content="web development, branding, online presence, channelers, 3D visuals">
+  <title>Universal Voice Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <!-- Standard favicon (16x16 / 32x32) -->
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+  <!-- High-resolution favicon (180x180) -->
+  <link rel="apple-touch-icon" href="images/faviconApple.png" sizes="180x180">
+
+  <script type="importmap">
+
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.154.0/build/three.module.js"
+    }
+  }
+  </script>
+  <style>
+
+
+#swipe-hint {
+  padding: 6px 14px;
+  color: #a7f3d0;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+
+
+
+#page-loader {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  transition: opacity 0.6s ease;
+}
+
+#page-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-content {
+  text-align: center;
+  color: #a7f3d0;
+  font-size: 1.2rem;
+  width: 280px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px 0 10px;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #34d399, #059669);
+  transition: width 0.2s ease;
+}
+
+#progress-text {
+  margin-top: 4px;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+
+    .greentext-title {
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      text-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, #000000, #0f172a);
+      overflow-x: hidden;
+      color: #f0f9ff;
+    }
+
+    .star-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, #111827 0%, #000000 100%);
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: linear-gradient(to bottom, #d1fae5, #a7f3d0);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: floatStar linear infinite, twinkle 2s ease-in-out infinite alternate;
+      box-shadow: 0 0 4px rgba(34, 197, 94, 0.3);
+    }
+
+    @keyframes floatStar {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes twinkle {
+      0% {
+        opacity: 0.6;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    #globe-container {
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      box-shadow: inset 0 0 50px rgba(16, 185, 129, 0.1), 0 0 100px rgba(34, 197, 94, 0.2);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    #globe-container canvas {
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    #theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 5;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    #content {
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    #content.opacity-0 {
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+    }
+
+    .welcome-section {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(5, 150, 105, 0.1), rgba(0, 0, 0, 0.4));
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 2rem;
+      padding: 4rem 3rem;
+      max-width: 48rem;
+      margin: 2rem auto;
+      text-align: center;
+      box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(34, 197, 94, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), breathe 6s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* New: Override for full-width offers content */
+    .offers-content {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border-radius: 0 !important;
+      padding: 1rem 0 !important;
+      max-width: none !important;
+      margin: 0 !important;
+      text-align: left !important;
+      box-shadow: none !important;
+      border: none !important;
+      animation: none !important;
+    }
+
+    .welcome-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.05) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes breathe {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.02);
+      }
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .mycta-button {
+      color: white;
+      background-color: transparent;
+      /* Makes the background transparent */
+
+      font-weight: 400;
+      font-size: 1.125rem;
+      padding: 1rem 0.5rem;
+      border-radius: 9999px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mycta-button2 {
+      background: linear-gradient(90deg, #10b981, #059669, #047857);
+      color: white;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 1.5rem;
+      border-radius: 9999px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      position: relative;
+      overflow: hidden;
+
+
+    }
+
+    .welcome-section h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      text-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+    }
+
+    .welcome-section p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: #d1fae5;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+      max-width: 36rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .welcome-section .cta-button {
+      background: linear-gradient(90deg, #10b981, #059669, #047857);
+      color: white;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 2.5rem;
+      border-radius: 9999px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-section .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .welcome-section .cta-button:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.4);
+      background: linear-gradient(90deg, #059669, #047857, #065f46);
+    }
+
+    .welcome-section .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    nav {
+      background: linear-gradient(135deg, rgba(6, 78, 59, 0.4), rgba(5, 150, 105, 0.2));
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    nav h1 {
+      background: linear-gradient(90deg, #d1fae5, #a7f3d0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    nav a {
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #d1fae5 !important;
+      text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+      transform: translateY(-1px);
+    }
+
+    #loading {
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(6, 78, 59, 0.3));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: 1rem;
+      color: #d1fae5;
+    }
+
+    #loading-progress {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    #loading-bar {
+      background: linear-gradient(90deg, #10b981, #34d399);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .service-card {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(5, 150, 105, 0.05));
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+
+    .service-card h3 {
+      color: #f0fdf4;
+    }
+
+    .service-card p {
+      color: #d1fae5;
+    }
+
+    .offer-package {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(5, 150, 105, 0.1));
+      border: 2px solid rgba(34, 197, 94, 0.3);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+    }
+
+    .offer-package::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .offer-package:hover::before {
+      transform: scaleX(1);
+    }
+
+    .offer-package:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px rgba(16, 185, 129, 0.4);
+      border-color: rgba(34, 197, 94, 0.5);
+    }
+
+    .offer-package h2 {
+      color: #f0fdf4;
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .offer-package .price {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #34d399;
+      margin: 1rem 0;
+    }
+
+
+    .offer-package .cta-button {
+      background: linear-gradient(90deg, #10b981, #059669, #047857);
+      color: white;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 2.5rem;
+      border-radius: 9999px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer-package .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .offer-package .cta-button:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.4);
+      background: linear-gradient(90deg, #059669, #047857, #065f46);
+    }
+
+
+    body.light {
+      background: linear-gradient(to bottom, #f0fdf4, #000000);
+      color: #000000;
+    }
+
+    body.light .welcome-section {
+      background: linear-gradient(135deg, rgba(248, 247, 247, 0.589), rgba(255, 255, 255, 0.8));
+      border-color: rgba(16, 185, 129, 0.2);
+      color: #ffffff;
+    }
+
+    body.light .welcome-section h1 {
+      background: linear-gradient(90deg, #04915bc4, #047857);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    body.light .welcome-section p {
+      color: #000000;
+    }
+
+    body.light nav {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.2));
+      border-bottom-color: rgba(16, 185, 129, 0.3);
+    }
+
+    body.light .service-card {
+      background: linear-gradient(135deg, rgba(248, 247, 247, 0.589), rgba(255, 255, 255, 0.8));
+      border-color: rgba(16, 185, 129, 0.2);
+      color: #ffffff;
+    }
+
+    body.light .service-card h3,
+    body.light .service-card p {
+      color: #000000;
+    }
+
+    body.light .offer-package {
+      background: linear-gradient(135deg, rgba(248, 247, 247, 0.589), rgba(255, 255, 255, 0.8));
+      border-color: rgb(255, 255, 255);
+      color: #000000;
+    }
+
+    body.light .offer-package h2 {
+      background: linear-gradient(90deg, #059669, #047857);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    body.light .offer-package .price {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #047857;
+      margin: 1rem 0;
+    }
+
+    @media (max-width: 640px) {
+      .welcome-section {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+        border-radius: 1rem;
+      }
+
+      .welcome-section h1 {
+        font-size: 2rem;
+      }
+
+      .welcome-section p {
+        font-size: 1.125rem;
+      }
+
+      .welcome-section .cta-button {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+      }
+    }
+
+    .contact-link {
+      color: #a7f3d0;
+      transition: all 0.3s ease;
+    }
+
+    .contact-link:hover {
+      color: #d1fae5;
+      text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+    }
+
+ 
+    /* -----------------------
+       Mobile menu (translucent + smooth)
+       ----------------------- */
+    /* We avoid using Tailwind's `hidden` because that prevents transitions.
+       We'll control visibility with max-height + opacity for smooth animation. */
+    #mobile-menu {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 350ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 220ms ease;
+      border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+      pointer-events: none;
+    }
+
+    #mobile-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+      /* max-height will be assigned dynamically to fit content for reliable animation */
+    }
+
+    /* give links some spacing and keep responsive */
+    #mobile-menu .mobile-links {
+      padding-top: 0.75rem;
+      padding-bottom: 1.25rem;
+    }
+
+    /* small accessibility improvement: focus visible */
+    #mobile-menu a:focus {
+      outline: 2px solid rgba(16, 185, 129, 0.5);
+      outline-offset: 2px;
+    }
+
+    footer {
+      text-align: center; padding: 40px; color: #555; font-size: 14px;
+    }       
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+<div id="page-loader">
+  <div class="loader-content">
+    <p>The World Is Awakening...</p>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <p id="progress-text">1%</p>
+  </div>
+</div>
+
+
+  <div class="star-bg" id="star-bg"></div>
+
+  <nav class="sticky top-0 z-10 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="text-left">
+  <h1 class="text-2xl font-bold">Universal Voice™</h1>
+</div>
+      <div class="hidden md:flex space-x-8">
+
+        <a href="contact.html"
+          class="text-gray-200 light:text-gray-700 hover:text-emerald-300 light:hover:text-emerald-700 font-medium transition-all duration-300">Contact</a>
+        <a href="terms.html"
+          class="text-gray-200 light:text-gray-700 hover:text-emerald-300 light:hover:text-emerald-700 font-medium transition-all duration-300">Legal</a>
+      </div>
+      <button id="mobile-menu-button" class="md:hidden text-gray-200 light:text-gray-700 focus:outline-none"
+        aria-label="Toggle menu" aria-expanded="false">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- NOTE: no `hidden` class here so transitions can animate.
+         JS will toggle `open` and set maxHeight dynamically. -->
+    <div id="mobile-menu" class="md:hidden" aria-hidden="true">
+      <div class="flex flex-col items-center space-y-4 mobile-links">
+
+        <a href="contact.html"
+          class="text-gray-200 light:text-gray-700 hover:text-emerald-300 light:hover:text-emerald-700 transition-all duration-300">Contact</a>
+        <a href="terms.html"
+          class="text-gray-200 light:text-gray-700 hover:text-emerald-300 light:hover:text-emerald-700 transition-all duration-300">Legal</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="flex flex-col items-center flex-1 relative">
+
+    <div id="globe-container" class="w-full h-[60vh] min-h-[400px] relative mx-4 rounded-xl">
+      <div id="swipe-hint">Swipe To Rotate</div>
+
+      <button id="theme-toggle" class="rounded-full p-2 transition-all duration-300 hover:scale-110"
+        aria-label="Toggle between light and dark theme">
+        <svg id="theme-icon" class="w-6 h-6 fill-white" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1112.79 3 7 7 0 0021 12.79z" />
+        </svg>
+      </button>
+      <div id="loading" class="absolute inset-0 flex items-center justify-center text-xl animate-pulse rounded-xl">
+        <div class="text-center bg-black/50 light:bg-white/50 rounded-xl p-6 backdrop-blur-md">
+          <p class="mb-4 font-medium">The World Is Awakening...</p>
+          <div id="loading-progress" class="w-80 h-2 bg-gray-700/50 rounded-full mx-auto">
+            <div id="loading-bar" class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full"
+              style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="content"
+      class="welcome-section transition-all duration-300 min-h-[300px] sm:min-h-[200px] animate-float opacity-100 mx-4">
+
+      <h1>Your Vision, Amplified Online</h1>
+
+      <p>
+        You have a gift that can guide, heal, and uplift others and the world is ready to hear it.
+        I help channelers, intuitives, and all lightworkers share their work. Every step of the way —
+        from vision and strategy to global presence — so their message can reach as far and wide as possible.
+        I don’t use WIX or other templates. I channel the website with you line by line so it’s an energetic match to your soul’s vision and mission.
+
+      </p>
+
+    <div class="audio-with-poster mx-auto rounded-lg shadow-lg w-full max-w-md relative">
+      <!-- Poster Image -->
+      <img src="images/sun.png" alt="Poster" class="w-full rounded-lg">
+
+      <!-- Audio Controls -->
+      <audio controls class="w-full mt-2 rounded-lg">
+        <source src="audio/IntroAudio.mp3" type="audio/mpeg">
+        Your browser does not support the audio tag.
+      </audio>
+    </div>
+
+
+
+
+    </div>
+
+  </div>
+
+  <footer>
+    © <span id="year"></span> Universal Voice™ • All Rights Reserved
+  </footer>
+
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "https://unpkg.com/three@0.154.0/examples/jsm/controls/OrbitControls.js";
+    import { FontLoader } from "https://unpkg.com/three@0.154.0/examples/jsm/loaders/FontLoader.js";
+    import { TextGeometry } from "https://unpkg.com/three@0.154.0/examples/jsm/geometries/TextGeometry.js";
+
+    const container = document.getElementById('globe-container');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x000000, 10, 90);
+    const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 2000);
+    camera.position.set(0, 2.5, 8);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambientLight);
+    const pLight = new THREE.PointLight(0xffffff, 1.5, 150);
+    pLight.position.set(10, 10, 10);
+    pLight.castShadow = true;
+    scene.add(pLight);
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 200;
+    const posArray = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 20;
+    }
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.005,
+      color: 0x34d399,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending
+    });
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    const starBg = document.getElementById('star-bg');
+    for (let i = 0; i < 150; i++) {
+      const s = document.createElement('div');
+      s.classList.add('star');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.width = (1 + Math.random() * 2) + 'px';
+      s.style.height = s.style.width;
+      s.style.animationDuration = (15 + Math.random() * 15) + 's';
+      s.style.animationDelay = Math.random() * 10 + 's';
+      starBg.appendChild(s);
+    }
+
+    const globeGeo = new THREE.SphereGeometry(2.5, 128, 128);
+    const textureLoader = new THREE.TextureLoader();
+    const globeMat = new THREE.MeshStandardMaterial({
+
+      transparent: true,
+      opacity:0,
+      
+      roughness: 0.5,
+      metalness: 0.1,
+      side: THREE.FrontSide
+    });
+
+    const globe = new THREE.Mesh(globeGeo, globeMat);
+    globe.castShadow = true;
+    globe.receiveShadow = true;
+    globe.rotation.y = 3;
+    scene.add(globe);
+
+    const loadingManager = new THREE.LoadingManager();
+    let loadedAssets = 0;
+    const totalAssets = 2;
+    const loadingBar = document.getElementById('loading-bar');
+
+    loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+      loadedAssets = itemsLoaded;
+      const progress = (itemsLoaded / totalAssets) * 100;
+      loadingBar.style.width = `${progress}%`;
+    };
+
+    loadingManager.onLoad = () => {
+      document.getElementById('loading').style.opacity = '0';
+      setTimeout(() => document.getElementById('loading').remove(), 300);
+      const canvas = container.querySelector('canvas');
+      if (canvas) requestAnimationFrame(() => canvas.style.opacity = 1);
+      container.style.opacity = 1;
+      animate();
+    };
+
+    loadingManager.onError = (url) => {
+      console.error(`Error loading ${url}`);
+      globeMat.color.setHex(0x4682b4);
+      globeMat.needsUpdate = true;
+      if (loadedAssets >= totalAssets) {
+        document.getElementById('loading').remove();
+        animate();
+      }
+    };
+
+    function updateGlobeTexture(isLightMode) {
+      const darkTexture = "images/earthTexture.jpg";
+      const lightTexture = "images/moonTexture.jpg";
+      const textureUrl = isLightMode ? lightTexture : darkTexture;
+      textureLoader.load(
+        textureUrl,
+        (texture) => {
+          globeMat.map = texture;
+          globeMat.opacity = 1;              // fade in
+          globeMat.transparent = false;      // clean up
+          globeMat.emissive.setHex(0x000000);
+          globeMat.emissiveIntensity = 0;
+          globeMat.needsUpdate = true;
+        },
+        undefined,
+        (error) => {
+          console.error('Texture loading failed:', error);
+          globeMat.color.setHex(0x4682b4);
+          globeMat.needsUpdate = true;
+        }
+      );
+    }
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enablePan = false;
+    controls.enableZoom = false;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.rotateSpeed = 0.4;
+    controls.autoRotate = false;
+    controls.autoRotateSpeed = 0.5;
+
+function isAtTop() {
+  return window.scrollY <= 15; // allow small tolerance
+}
+
+// Disable rotation unless at the top
+function updateRotationPermission() {
+  controls.enableRotate = isAtTop();
+}
+
+// Update whenever user scrolls
+window.addEventListener("scroll", updateRotationPermission);
+
+// Initial check
+updateRotationPermission();    
+    const labels = [];
+    const words = ["Welcome", "Offers", "About Me", "Examples"];
+    const positions = [
+      new THREE.Vector3(0, 0, 3.5),
+      new THREE.Vector3(3.5, 0, 0),
+      new THREE.Vector3(0, 0, -3.5),
+      new THREE.Vector3(-3.5, 0, 0)
+    ];
+    const fontLoader = new FontLoader(loadingManager);
+    let currentWord = words[0];
+    const tmpVec = new THREE.Vector3();
+    const camDir = new THREE.Vector3();
+    const clock = new THREE.Clock();
+
+    function setContent(word) {
+      if (currentWord === word) return;
+      currentWord = word;
+      const contentEl = document.getElementById('content');
+
+      // Immediately hide the content to prevent flash
+      contentEl.style.display = 'none';
+      contentEl.classList.add('opacity-0');
+      contentEl.classList.remove('welcome-section', 'offers-content');
+
+      requestAnimationFrame(() => {
+        // Update content and apply appropriate class
+        const data = {
+          "Welcome": {
+            text: `
+          <h1>Your Vision, Amplified Online</h1>
+          <p>        You have a gift that can guide, heal, and uplift others and the world is ready to hear it.
+            I help channelers, intuitives, and all lightworkers share their work. Every step of the way —
+            from vision and strategy to global presence — so their message can reach as far and wide as possible.
+            I don’t use WIX or other templates. I channel the website with you line by line so it’s an energetic match to your soul’s vision and mission.
+
+          </p>
+
+          <audio controls class="mx-auto rounded-lg shadow-lg max-w-full">
+            <source src="audio/IntroAudio.mp3" type="audio/mp3">
+            Your browser does not support the audio tag.
+          </audio>
+
+        `
+          },
+          "About Me": {
+            text: `
+            <h1>About Me</h1>
+
+            <div class="max-w-4xl mx-auto text-center">
+
+              <div class="text-xl font-medium text-gray-200 light:text-gray-700">
+                <p class="leading-relaxed">
+                  I'm passionate about our future and want to assist in creating the highest vibrational experience possible. 
+                  I'm a tech developer specializing in visual interactive experiences. 
+                  With a focus on earthy, harmonious designs, I help channelers like you amplify your message in the world through technology.
+                  
+                </p>
+
+                <img src="images/sunMe.jpg" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+
+              </div>
+            </div>
+        `
+          },
+          "Examples": {
+            text: `
+          <div class="px-4 max-w-7xl mx-auto">
+            <div class="welcome-section px-4 py-4 max-w-7xl mx-auto height-auto">
+              <div class="text-center">
+                <h1 class="!mb-0  text-4xl font-bold mb-4 text-gray-200 light:text-gray-700">Examples</h2>
+                
+              </div>
+            </div>
+             <div class="text-center">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              </div>
+            </div>
+
+
+              <div class="text-center grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto ">
+
+                <img src="images/mockupDark.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupEartly.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupCloudy.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupSpaceDark.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupCosmicWoman.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupGreenGarden.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+              </div>
+              <button type="button" 
+                      class="mycta-button2 mx-auto block mt-6 mb-6" 
+                      onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                <i class="fas fa-arrow-up mr-2"></i> Back To Top
+              </button>
+
+          </div>
+
+        `
+        
+          },
+          "Offers": {
+            text: `
+          <div class="px-4 max-w-7xl mx-auto">
+            <div class="welcome-section px-4 max-w-7xl mx-auto height-auto">
+              <div class="text-center mb-16">
+                <h1 class="text-4xl font-bold mb-4 text-gray-200 light:text-gray-700">Services and Packages</h2>
+                <p class="text-xl text-gray-300 light:text-gray-600 max-w-3xl mx-auto">Choose the package that feels right for you, or contact me for individual        services.
+                    The prices shown are one-time fees for the complete design, development, and launch of your website.
+                    Hosting and domain name are paid separately (usually $8–$20/month depending on your choice of provider) and remain 100% under your control — there are no hidden monthly charges from me. All packages include ongoing support and can be tailored to your exact vision.
+                </p>
+              </div>
+            </div>
+             <div class="text-center">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              </div>
+            </div>
+
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+              <div class="offer-package p-8 text-center">
+                <h2 class="mb-4">Foundation Package</h2>
+                <div class="price">$649</div>
+                <p class="mb-6">Ideal for beginners establishing their online foundation.</p>
+                <ul class="text-left mb-6 space-y-2 text-sm">
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💻 Unlimited Page Website</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> ✨ Unique Branding & Style</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💲  Accept Payments</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📅 Calendar Booking System</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🤝 I'll show you how to make future changes</li>
+                </ul>
+                <a href="contact.html" class="cta-button p-0 inline-block">Choose Basic</a>
+              </div>
+
+              
+              <div class="offer-package p-8 text-center border-2 border-emerald-400 relative">
+                <h2 class="mb-4">Essentials Package</h2>
+                <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white px-4 py-1 rounded-full text-sm font-bold">Most Popular</div>
+
+                <div class="price">$1499</div>
+                <p class="mb-6">Essential for a thriving online presence.</p>
+                <ul class="text-left mb-6 space-y-2 text-sm">
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💻 Unlimited Page Website</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> ✨ Unique Branding & Style</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💲  Accept Payments</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📅 Calendar Booking System</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🤝 I'll show you how to make future changes</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💌 Email Newsletters</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🔍 Visibility & SEO</li>
+                </ul>
+                <a href="contact.html" class="cta-button p-0 inline-block">Choose Starter</a>
+              </div>
+
+
+              <div class="offer-package p-8 text-center ">
+                <h2 class="mb-4">Viral <br> Growth</h2>
+                <div class="price">$2999</div>
+                <p class="mb-6">For expanding your reach and audience organically.</p>
+                <ul class="text-left mb-6 space-y-2 text-sm">
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💻 Unlimited Page Website</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> ✨ Unique Branding & Style</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💲  Accept Payments</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📅 Calendar Booking System</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💌 Email Newsletters</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🔍 Visibility & SEO</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🤝 I'll show you how to make future changes</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📱 Setup All Social Media & Best Practice Guidance</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📊 Analytics & Growth Tracking</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📖 E & Physical Book Creation</li>
+                </ul>
+                <a href="contact.html" class="cta-button inline-block" >Choose Growth</a>
+              </div>
+
+
+
+              <div class="offer-package p-8 text-center">
+                <h2 class="mb-4">Global Mission</h2>
+                <div class="price">$4,999+</div>
+                <p class="mb-6">For expanding your reach and audience using paid advertising with comprehensive support.</p>
+                <ul class="text-left mb-6 space-y-2 text-sm">
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💻 Unlimited Page Website Creation</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> ✨ Unique Branding & Style</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💲  Accept Payments</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📅 Calendar Booking System</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💌 Email Newsletters</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🔍 Visibility & SEO</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🤝 I'll show you how to make future changes</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📱 Setup All Social Media & Guidance</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📊 Analytics & Growth Tracking</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📖 E & Physical Book Creation</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🌍 Language Translation For Global Reach</li>
+                  <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🔮 Paid Global Promotions On All Platforms For 12 Months</li>
+
+                </ul>
+                <a href="contact.html" class="cta-button inline-block" >Choose Viral</a>
+
+
+              </div>
+
+
+            </div>
+
+              <button type="button" 
+                      class="mycta-button2 mx-auto block mt-6 mb-6" 
+                      onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                <i class="fas fa-arrow-up mr-2"></i> Back To Top
+              </button>
+
+          </div>
+
+        `
+          }
+
+        }[word] ?? { text: `<div class="text-lg font-medium text-gray-200 light:text-gray-800"><p>Content not available.</p></div>` };
+
+        contentEl.innerHTML = data.text;
+
+        // Apply the appropriate class based on the word
+        if (word === 'Offers' || word === 'Examples') {
+          contentEl.classList.add('offers-content');
+        } else {
+          contentEl.classList.add('welcome-section');
+        }
+
+        // Ensure the content is styled before showing
+        requestAnimationFrame(() => {
+          contentEl.style.display = 'block';
+          contentEl.classList.remove('opacity-0');
+        });
+      });
+    }
+
+    // Handle navigation clicks to update globe content
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        const section = href.replace('#', '');
+        const word = section.charAt(0).toUpperCase() + section.slice(1);
+        if (words.includes(word)) {
+          e.preventDefault();
+          setContent(word);
+        }
+      });
+    });
+
+    fontLoader.load('https://threejs.org/examples/fonts/optimer_bold.typeface.json', font => {
+      const textOptions = str => ({ font, size: 0.5, height: 0.05, curveSegments: 12 });
+      words.forEach((w, i) => {
+        const g = new TextGeometry(w, textOptions(w));
+        g.computeBoundingBox();
+        g.translate(-0.5 * (g.boundingBox.max.x - g.boundingBox.min.x), -0.25, 0);
+        const material = new THREE.MeshStandardMaterial({
+          color: 0x34d399,
+          transparent: true,
+          opacity: 0.3,
+          emissive: 0x10b981,
+          emissiveIntensity: 0.2,
+          roughness: 0.7,
+          metalness: 0.1
+        });
+        const mesh = new THREE.Mesh(g, material);
+        mesh.position.copy(positions[i]);
+        mesh.userData = { word: w, basePos: positions[i].clone(), targetOpacity: 0.3 };
+        scene.add(mesh);
+        labels.push(mesh);
+      });
+
+      setContent(currentWord);
+      updateGlobeTexture(false);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      controls.update();
+      globe.rotation.y += 0.002;
+      particlesMesh.rotation.y += 0.001;
+
+      camera.getWorldDirection(camDir);
+
+      let bestLabel = null, closestDist = Infinity;
+      labels.forEach(label => {
+        label.getWorldPosition(tmpVec);
+        const dist = camera.position.distanceTo(tmpVec);
+        if (dist < closestDist) {
+          closestDist = dist;
+          bestLabel = label;
+        }
+      });
+
+      labels.forEach(label => {
+        label.quaternion.copy(camera.quaternion);
+        const base = label.userData.basePos;
+        label.position.set(
+          base.x + Math.sin(t * 0.5 + base.x) * 0.05,
+          base.y + Math.sin(t + base.x) * 0.1,
+          base.z
+        );
+        label.getWorldPosition(tmpVec);
+
+        const targetOpacity = (label === bestLabel) ? 1 : 0.3;
+        label.material.opacity = THREE.MathUtils.lerp(label.material.opacity, targetOpacity, 0.05);
+        label.material.emissiveIntensity = targetOpacity * 0.3;
+
+        if (label === bestLabel) {
+          label.material.color.setHex(0xffffff);
+        } else {
+          label.material.color.setHex(0x34d399);
+        }
+      });
+
+      if (bestLabel && bestLabel.userData.word !== currentWord) {
+        setContent(bestLabel.userData.word);
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // Smooth globe rotation when a CTA button is clicked
+    document.querySelectorAll('.cta-button[data-target]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = btn.getAttribute('data-target');
+
+        // Find the label for the target
+        const label = labels.find(l => l.userData.word === target);
+        if (!label) return;
+
+        // Calculate the rotation angle to bring the label in front
+        const targetPos = label.position.clone();
+        const angle = Math.atan2(targetPos.x, targetPos.z);
+
+        // Animate the rotation smoothly
+        const duration = 1000; // in ms
+        const start = globe.rotation.y;
+        const delta = angle - start;
+        const startTime = performance.now();
+
+        function rotate(now) {
+          const t = Math.min((now - startTime) / duration, 1);
+          globe.rotation.y = start + delta * t;
+          if (t < 1) requestAnimationFrame(rotate);
+        }
+        requestAnimationFrame(rotate);
+      });
+    });
+
+    /* -----------------------------
+       MOBILE MENU: improved toggle
+       ----------------------------- */
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    // Utility to open menu: set class and exact maxHeight for smooth animation
+    function openMobileMenu() {
+      mobileMenu.classList.add('open');
+      // set exact maxHeight to enable smooth from 0 -> content height
+      const desired = mobileMenu.scrollHeight;
+      mobileMenu.style.maxHeight = desired + 'px';
+      mobileMenu.style.opacity = '1';
+      mobileMenu.style.pointerEvents = 'auto';
+      mobileMenuButton.setAttribute('aria-expanded', 'true');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeMobileMenu() {
+      // set maxHeight to current scrollHeight first (forces computed start), then 0
+      mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+      // next frame collapse
+      requestAnimationFrame(() => {
+        mobileMenu.style.maxHeight = '0';
+        mobileMenu.style.opacity = '0';
+        mobileMenu.style.pointerEvents = 'none';
+      });
+      mobileMenu.classList.remove('open');
+      mobileMenuButton.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+    }
+
+    // initialize
+    mobileMenuButton.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    mobileMenu.style.maxHeight = '0';
+    mobileMenu.style.opacity = '0';
+    mobileMenu.style.pointerEvents = 'none';
+
+    mobileMenuButton.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.contains('open');
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    });
+
+    // Close menu when a mobile link is clicked
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        closeMobileMenu();
+      });
+    });
+
+    // If the window resizes while menu is open, recalculate maxHeight
+    window.addEventListener('resize', () => {
+      // Three.js renderer resize
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+
+      if (mobileMenu.classList.contains('open')) {
+        // let contents reflow then set new maxHeight
+        requestAnimationFrame(() => {
+          mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+        });
+      }
+    });
+
+    /* -----------------------------
+       THEME + OTHER SCRIPTS (unchanged)
+       ----------------------------- */
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const isLightMode = localStorage.getItem('theme') === 'light';
+    if (isLightMode) {
+      document.body.classList.add('light');
+      updateGlobeTexture(true);
+    } else {
+      
+      updateGlobeTexture(false);
+    }
+
+const sunPath = "M12 4.354a1 1 0 011 0v1.292a1 1 0 11-2 0V4.354a1 1 0 011-1zm6.364 1.636a1 1 0 010 1.414l-.914.914a1 1 0 11-1.414-1.414l.914-.914a1 1 0 011.414 0zM20 12a1 1 0 110 2h-1.292a1 1 0 110-2H20zm-1.636 6.364a1 1 0 01-1.414 0l-.914-.914a1 1 0 011.414-1.414l.914.914a1 1 0 010 1.414zM12 20a1 1 0 01-1 1v-1.292a1 1 0 112 0V21a1 1 0 01-1-1zm-6.364-1.636a1 1 0 010-1.414l.914-.914a1 1 0 011.414 1.414l-.914.914a1 1 0 01-1.414 0zM4 12a1 1 0 110-2h1.292a1 1 0 110 2H4zm1.636-6.364a1 1 0 011.414-0l.914.914a1 1 0 11-1.414 1.414l-.914-.914a1 1 0 010-1.414zM12 6a6 6 0 100 12 6 6 0 000-12z";
+const moonPath = "M21 12.79A9 9 0 1112.79 3 7 7 0 0021 12.79z";
+
+
+themeToggle.addEventListener('click', () => {
+  const isLight = document.body.classList.toggle('light'); // toggle body class
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
+  // swap SVG path
+  themeIcon.innerHTML = `<path d="${isLight ? sunPath : moonPath}" />`;
+
+  // optionally update globe texture
+  updateGlobeTexture(isLight);
+});
+    animate();
+
+
+  const fill = document.getElementById("progress-fill");
+  const text = document.getElementById("progress-text");
+
+  let progress = 0;
+
+  // Simulate progress increasing smoothly
+  const interval = setInterval(() => {
+    // Slow down as it nears 80%
+    progress += (progress < 80) ? 2 : 0.3;
+
+    if (progress > 99) progress = 99;
+
+    fill.style.width = progress + "%";
+    text.textContent = Math.floor(progress) + "%";
+  }, 80);
+
+  // When the actual page finishes loading:
+  window.addEventListener("load", () => {
+    clearInterval(interval);
+    progress = 100;
+    fill.style.width = "100%";
+    text.textContent = "100%";
+
+    const loader = document.getElementById("page-loader");
+    loader.classList.add("hidden");
+    setTimeout(() => loader.remove(), 800);
+  });
+    
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+
+  </script>
+</body>
+
+</html>
