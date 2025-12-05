@@ -909,12 +909,13 @@
     controls.autoRotateSpeed = 0.5;
 
 function isAtTop() {
-  return window.scrollY <= 15; // allow small tolerance
+  return window.scrollY <= 550; // allow small tolerance
 }
 
 // Disable rotation unless at the top
 function updateRotationPermission() {
   controls.enableRotate = isAtTop();
+  
 }
 
 // Update whenever user scrolls
@@ -941,10 +942,8 @@ updateRotationPermission();
       currentWord = word;
       const contentEl = document.getElementById('content');
 
-      // Immediately hide the content to prevent flash
-      contentEl.style.display = 'none';
-      contentEl.classList.add('opacity-0');
-      contentEl.classList.remove('welcome-section', 'offers-content');
+
+      contentEl.classList.remove( 'offers-content');
 
       requestAnimationFrame(() => {
         // Update content and apply appropriate class
