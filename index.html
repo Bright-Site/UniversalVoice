@@ -11,10 +11,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <!-- Standard favicon (16x16 / 32x32) -->
-  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="images/favicon.png" type="image/x-icon">
 
   <!-- High-resolution favicon (180x180) -->
-  <link rel="apple-touch-icon" href="images/faviconApple.png" sizes="180x180">
+  <link rel="apple-touch-icon" href="images/faviconApple.ico" sizes="180x180">
 
   <script type="importmap">
 
@@ -739,25 +739,28 @@
     <div id="content"
       class="welcome-section transition-all duration-300 min-h-[300px] sm:min-h-[200px] animate-float opacity-100 mx-4">
 
-      <h1>Your Vision, Amplified Online</h1>
+      <h1>Your Voice, Amplified Online</h1>
 
       <p>
-        You have a gift that can guide, heal, and uplift others and the world is ready to hear it.
-        I help channelers, intuitives, and all lightworkers share their work. Every step of the way —
-        from vision and strategy to global presence — so their message can reach as far and wide as possible.
-        I don’t use WIX or other templates. I channel the website with you line by line so it’s an energetic match to your soul’s vision and mission.
+            You have a gift that can guide, heal, and uplift others and the world is ready to hear it.
+            I help channelers, intuitives, and all lightworkers share their work. Every step of the way —
+            from the initial vision to global presence — Making our message reach as far and wide as possible.
+            I don’t use WIX or other templates. I'll channel the website with you step by step so it can be an exact vibrational match to what your higher self wants to share!
 
       </p>
 
-    <div class="-with-poster mx-auto rounded-lg shadow-lg w-full max-w-md relative">
+    <div class="audio-with-poster mx-auto rounded-lg shadow-lg w-full max-w-md relative">
       <!-- Poster Image -->
       <img src="images/sun.png" alt="Poster" class="w-full rounded-lg">
 
       <!-- Audio Controls -->
       <audio controls class="w-full mt-2 rounded-lg">
-        <source src="audio/intro_audio.mp3" type="audio/mpeg">
+        <source src="audio/AnjieHipple.mp3" type="audio/mpeg">
         Your browser does not support the audio tag.
       </audio>
+      <div class="mt-2">
+        <a href="https://www.thejudahchannel.com/" class="contact-link hover:text-emerald-300 underline" target="_blank" rel="noopener noreferrer">Anjie Hipple-Channeling </a>
+      </div>
     </div>
 
 
@@ -907,6 +910,10 @@
     controls.rotateSpeed = 0.4;
     controls.autoRotate = false;
     controls.autoRotateSpeed = 0.5;
+// Prevent getting close to the poles (e.g., limit to ~30° from equator on both sides)
+// This allows views from about 60° N to 60° S latitude, avoiding pole issues entirely
+controls.minPolarAngle = Math.PI / 3;   // ~30° from North pole (0.523 radians)
+controls.maxPolarAngle = 2.1 * Math.PI / 3; // ~30° from South pole (2.618 radians)
 
 function isAtTop() {
   return window.scrollY <= 550; // allow small tolerance
@@ -950,18 +957,21 @@ updateRotationPermission();
         const data = {
           "Welcome": {
             text: `
-          <h1>Your Vision, Amplified Online</h1>
-          <p>        You have a gift that can guide, heal, and uplift others and the world is ready to hear it.
+          <h1>Your Voice, Amplified Online</h1>
+          <p>
+            You have a gift that can guide, heal, and uplift others and the world is ready to hear it.
             I help channelers, intuitives, and all lightworkers share their work. Every step of the way —
-            from vision and strategy to global presence — so their message can reach as far and wide as possible.
-            I don’t use WIX or other templates. I channel the website with you line by line so it’s an energetic match to your soul’s vision and mission.
-
+            from the initial vision to global presence — Making our message reach as far and wide as possible.
+            I don’t use WIX or other templates. I'll channel the website with you step by step so it can be an exact vibrational match to what your higher self wants to share!
           </p>
 
           <audio controls class="mx-auto rounded-lg shadow-lg max-w-full">
-            <source src="audio/IntroAudio.mp3" type="audio/mp3">
+            <source src="audio/AnjieHipple.mp3" type="audio/mp3">
             Your browser does not support the audio tag.
           </audio>
+          <div class="mt-2">
+            <a href="https://www.thejudahchannel.com/" class="contact-link hover:text-emerald-300 underline" target="_blank" rel="noopener noreferrer">Anjie Hipple-Channeling </a>
+          </div>
 
         `
           },
@@ -974,12 +984,14 @@ updateRotationPermission();
               <div class="text-xl font-medium text-gray-200 light:text-gray-700">
                 <p class="leading-relaxed">
                   I'm passionate about our future and want to assist in creating the highest vibrational experience possible. 
-                  I'm a tech developer specializing in visual interactive experiences. 
-                  With a focus on earthy, harmonious designs, I help channelers like you amplify your message in the world through technology.
+                  I'm a tech developer specializing in visual interactive experiences 
+                  with a focus on earthy, harmonious designs, I help channelers like you amplify your message in the world.
                   
                 </p>
 
                 <img src="images/sunMe.jpg" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <a href="contact.html" class="cta-button p-0 inline-block">Contact Me</a>
+
 
               </div>
             </div>
@@ -1002,12 +1014,12 @@ updateRotationPermission();
 
               <div class="text-center grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto ">
 
-                <img src="images/mockupDark.webp" alt="Dark" class="mx-auto mb-6 rounded-xl  object-cover">
-                <img src="images/mockupEartly.webp" alt="Eartly" class="mx-auto mb-6 rounded-xl  object-cover">
-                <img src="images/mockup_cloudy.webp" alt="Cloudy" class="mx-auto mb-6 rounded-xl  object-cover">
-                <img src="images/mockupSpaceDark.webp" alt="SpaceDark" class="mx-auto mb-6 rounded-xl  object-cover">
-                <img src="images/mockupCosmicWoman.webp" alt="CosmicWoman" class="mx-auto mb-6 rounded-xl  object-cover">
-                <img src="images/mockupGreenGarden.webp" alt="GreenGarden" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupDark.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupEartly.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupCloudy.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupSpaceDark.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupCosmicWoman.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
+                <img src="images/mockupGreenGarden.webp" alt="About me" class="mx-auto mb-6 rounded-xl  object-cover">
               </div>
               <button type="button" 
                       class="mycta-button2 mx-auto block mt-6 mb-6" 
@@ -1051,16 +1063,16 @@ updateRotationPermission();
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📅 Calendar Booking System</li>
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🤝 I'll show you how to make future changes</li>
                 </ul>
-                <a href="contact.html" class="cta-button p-0 inline-block">Choose Basic</a>
+                <a href="contact.html" class="cta-button p-0 inline-block">Book A Meeting</a>
               </div>
 
               
               <div class="offer-package p-8 text-center border-2 border-emerald-400 relative">
-                <h2 class="mb-4">Essentials Package</h2>
+                <h2 class="mb-4">Thriving Package</h2>
                 <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white px-4 py-1 rounded-full text-sm font-bold">Most Popular</div>
 
                 <div class="price">$1499</div>
-                <p class="mb-6">Essential for a thriving online presence.</p>
+                <p class="mb-6">Create a thriving online presence.</p>
                 <ul class="text-left mb-6 space-y-2 text-sm">
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💻 Unlimited Page Website</li>
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> ✨ Unique Branding & Style</li>
@@ -1070,7 +1082,7 @@ updateRotationPermission();
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 💌 Email Newsletters</li>
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🔍 Visibility & SEO</li>
                 </ul>
-                <a href="contact.html" class="cta-button p-0 inline-block">Choose Starter</a>
+                <a href="contact.html" class="cta-button p-0 inline-block">Book A Meeting</a>
               </div>
 
 
@@ -1090,7 +1102,7 @@ updateRotationPermission();
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📊 Analytics & Growth Tracking</li>
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 📖 E & Physical Book Creation</li>
                 </ul>
-                <a href="contact.html" class="cta-button inline-block" >Choose Growth</a>
+                <a href="contact.html" class="cta-button inline-block" >Book A Meeting</a>
               </div>
 
 
@@ -1114,7 +1126,7 @@ updateRotationPermission();
                   <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 🔮 Paid Global Promotions On All Platforms For 12 Months</li>
 
                 </ul>
-                <a href="contact.html" class="cta-button inline-block" >Choose Viral</a>
+                <a href="contact.html" class="cta-button inline-block" >Book A Meeting</a>
 
 
               </div>
@@ -1403,6 +1415,3 @@ themeToggle.addEventListener('click', () => {
 </body>
 
 </html>
-
-
-
